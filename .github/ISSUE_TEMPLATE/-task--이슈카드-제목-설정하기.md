@@ -1,7 +1,7 @@
 ---
 name: "[TASK] 이슈카드 제목 설정하기"
 about: Issue Task (Option)
-title: ''
+title: "[TASK] "
 labels: ''
 assignees: ''
 
