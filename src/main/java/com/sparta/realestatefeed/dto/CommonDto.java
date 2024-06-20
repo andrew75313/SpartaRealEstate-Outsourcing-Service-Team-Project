@@ -5,18 +5,15 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class Response<T>  {
+public class CommonDto<T>  {
 
-    private final Boolean result;
     private final Integer status;
     private final String message;
-
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private final T data;
 
     @Builder
-    public Response(Boolean result, Integer status, String message, T data) {
-        this.result = result;
+    public CommonDto(Integer status, String message, T data) {
         this.status = status;
         this.message = message;
         this.data = data;
