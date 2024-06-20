@@ -14,5 +14,4 @@ public class ApartRequestDto {
     private String area;
     private Long salePrice;
     private Boolean isSaled;
-    private Long userId; // 사용자 ID 연관 처리?
 }

@@ -14,7 +14,7 @@ public class ApartService {
 
     private final ApartRepository apartRepository;
 
-    public ApartService(ApartRepository apartRepository, UserRepository userRepository) {
+    public ApartService(ApartRepository apartRepository) {
         this.apartRepository = apartRepository;
     }
 
