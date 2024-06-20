@@ -37,7 +37,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         try {
             LoginRequestDto requestDto = new ObjectMapper().readValue(request.getInputStream(), LoginRequestDto.class);
-
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
                             requestDto.getUsername(),
@@ -55,22 +54,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         User user = ((UserDetailsImpl) authResult.getPrincipal()).getUser();
 
-        String accessToken = jwtUtil.createAccessToken(user.getUserName(), user.getUserRoleEnum());
+        String accessToken = jwtUtil.createAccessToken(user.getUserName(), user.getRole());
         response.addHeader(JwtConfig.ACCESS_TOKEN_HEADER, accessToken);
         String refreshToken = jwtUtil.createRefreshToken(user.getUserName());
         response.addHeader(JwtConfig.REFRESH_TOKEN_HEADER, refreshToken);
 
-        //DB 리프레시 토큰 확인
-        RefreshToken checkToken = refreshTokenRepository.findByToken(refreshToken)
-                .orElseGet(() -> {
-                    return refreshTokenRepository.save(new RefreshToken(refreshToken, user));
-                });
+        RefreshToken existingToken = refreshTokenRepository.findByUserId(user.getId()).orElse(null);
 
-        // 있던 토큰 삭제하고 새로 위에서 발급한 토큰 넣기
-        if (checkToken != null) {
-            refreshTokenRepository.delete(checkToken);
-            refreshTokenRepository.save(new RefreshToken(refreshToken, user));
+        if (existingToken != null) {
+            refreshTokenRepository.delete(existingToken);
         }
+
+        refreshTokenRepository.save(new RefreshToken(refreshToken, user));
 
         sendMessage(response, "로그인에 성공하였습니다.");
     }
