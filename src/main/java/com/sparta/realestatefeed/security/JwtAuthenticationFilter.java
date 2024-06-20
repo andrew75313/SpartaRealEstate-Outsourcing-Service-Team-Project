@@ -9,9 +9,7 @@ import com.sparta.realestatefeed.repository.RefreshTokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -45,7 +43,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                     )
             );
         } catch (IOException e) {
-            throw new RuntimeException("아이디/비밀번호를 반드시 입력해주세요.");
+            throw new RuntimeException();
         }
     }
 
@@ -73,16 +71,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
 
-        response.setStatus(401);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-        sendMessage(response, "로그인에 실패하였습니다");
+        sendMessage(response, "로그인에 실패하였습니다.");
     }
 
     private void sendMessage(HttpServletResponse res, String message) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         res.setContentType("application/json;charset=UTF-8");
-        String jsonResponse = objectMapper.writeValueAsString(Map.of("statusCode", HttpStatus.BAD_REQUEST.value(), "msg", message));
+        String jsonResponse = objectMapper.writeValueAsString(Map.of("statusCode", res.getStatus(), "msg", message));
 
         res.getWriter().write(jsonResponse);
     }

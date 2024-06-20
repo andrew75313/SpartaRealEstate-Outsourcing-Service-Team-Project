@@ -8,7 +8,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -34,18 +33,20 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
 
-        String errorMessage = "토큰이 유효하지 않습니다.";
+        String errorMessage = "재로그인을 시도해주세요.";
 
         try {
             String tokenValue = jwtUtil.getAccessTokenFromHeader(req);
 
             if (tokenValue == null) {
                 tokenValue = jwtUtil.getRefreshTokenFromHeader(req);
-                errorMessage = "재로그인을 시도해주세요.";
             }
 
             if (StringUtils.hasText(tokenValue)) {
                 if (!jwtUtil.validateToken(tokenValue)) {
+                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    sendMessage(res, errorMessage);
+
                     throw new UnsupportedJwtException("토큰이 유효하지 않습니다.");
                 }
 
@@ -54,13 +55,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 try {
                     setAuthentication(userInfo.getSubject());
                 } catch (Exception e) {
+                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    sendMessage(res, errorMessage);
+
                     throw new UnsupportedJwtException("토큰이 유효하지 않습니다.");
                 }
             }
-
             filterChain.doFilter(req, res);
         } catch (UnsupportedJwtException e) {
-            sendErrorMessage(res, errorMessage);
+            sendMessage(res, errorMessage);
         }
     }
 
@@ -80,13 +83,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
-    private void sendErrorMessage(HttpServletResponse res, String message) throws IOException {
-
-        res.setStatus(HttpStatus.BAD_REQUEST.value());
+    private void sendMessage(HttpServletResponse res, String message) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         res.setContentType("application/json;charset=UTF-8");
-        String jsonResponse = objectMapper.writeValueAsString(Map.of("statusCode", HttpStatus.BAD_REQUEST.value(), "msg", message));
+        String jsonResponse = objectMapper.writeValueAsString(Map.of("statusCode", res.getStatus(), "msg", message));
 
         res.getWriter().write(jsonResponse);
     }
