@@ -70,6 +70,7 @@ public class WebSecurityConfig {
                 authorizeHttpRequests
                         .requestMatchers("/api/login").permitAll()
                         .requestMatchers( "/api/signup").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                         .anyRequest().authenticated()
         );
 
