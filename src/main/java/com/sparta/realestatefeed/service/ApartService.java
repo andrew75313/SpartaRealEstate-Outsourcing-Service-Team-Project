@@ -41,7 +41,7 @@ public class ApartService {
     }
 
     public CommonDto<List<ApartResponseDto>> getAllAparts() {
-        List<Apart> aparts = apartRepository.findAll();
+        List<Apart> aparts = apartRepository.findAllByOrderByModifiedAtDesc();
         List<ApartResponseDto> responseDtos = aparts.stream().map(ApartResponseDto::new).collect(Collectors.toList());
         return new CommonDto<>(HttpStatus.OK.value(), "모든 아파트 조회에 성공하였습니다.", responseDtos);
     }
