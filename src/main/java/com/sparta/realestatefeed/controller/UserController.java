@@ -40,7 +40,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/user/logout")
+    @PostMapping("/logout")
     private ResponseEntity<?> userLogout(@RequestHeader("Authorization") String authorizationHeader) {
         try {
             String accessToken = authorizationHeader.replace(JwtConfig.BEARER_PREFIX, "");
