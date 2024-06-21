@@ -42,6 +42,8 @@ public class User extends Timestamped {
     @Email
     private String email;
 
+
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRoleEnum role;
