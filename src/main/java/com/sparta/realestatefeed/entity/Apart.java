@@ -1,5 +1,6 @@
 package com.sparta.realestatefeed.entity;
 
+
 import com.sparta.realestatefeed.dto.ApartRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
