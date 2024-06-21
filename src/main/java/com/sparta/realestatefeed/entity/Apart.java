@@ -44,4 +44,12 @@ public class Apart extends Timestamped {
         this.isSaled = requestDto.getIsSaled();
         this.user = user;
     }
+
+    public void update(ApartRequestDto requestDto) {
+        this.apartName = requestDto.getApartName();
+        this.address = requestDto.getAddress();
+        this.area = requestDto.getArea();
+        this.salePrice = requestDto.getSalePrice();
+        this.isSaled = requestDto.getIsSaled();
+    }
 }
