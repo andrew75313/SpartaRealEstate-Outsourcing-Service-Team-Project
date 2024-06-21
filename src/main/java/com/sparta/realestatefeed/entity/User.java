@@ -1,6 +1,7 @@
 package com.sparta.realestatefeed.entity;
 
 
+import com.sparta.realestatefeed.dto.ProfileRequestDto;
 import com.sparta.realestatefeed.dto.UserRegisterRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -52,4 +53,8 @@ public class User extends Timestamped {
     }
 
 
+    public void updateProfile(ProfileRequestDto profileRequestDto) {
+        this.nickName = profileRequestDto.getNickName();
+        this.info = profileRequestDto.getInfo();
+    }
 }
