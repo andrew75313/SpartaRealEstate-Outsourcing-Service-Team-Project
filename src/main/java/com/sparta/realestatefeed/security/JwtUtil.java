@@ -3,14 +3,12 @@ package com.sparta.realestatefeed.security;
 import com.sparta.realestatefeed.config.JwtConfig;
 import com.sparta.realestatefeed.entity.UserRoleEnum;
 import com.sparta.realestatefeed.repository.UserRepository;
-
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.security.SignatureException;
 import java.util.Date;
 
 @Slf4j(topic = "JwtUtil")

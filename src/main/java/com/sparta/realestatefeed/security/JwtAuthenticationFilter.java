@@ -19,9 +19,7 @@ import java.io.IOException;
 import java.util.Map;
 
 @Slf4j
-public class
-
-JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
