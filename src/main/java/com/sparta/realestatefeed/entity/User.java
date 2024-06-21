@@ -12,6 +12,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Setter
 @Getter
@@ -57,4 +60,9 @@ public class User extends Timestamped {
         this.nickName = profileRequestDto.getNickName();
         this.info = profileRequestDto.getInfo();
     }
+
+    @ElementCollection
+    @CollectionTable(name = "user_previous_passwords", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "previous_password")
+    private List<String> previousPasswords = new ArrayList<>();
 }
