@@ -10,6 +10,7 @@ import com.sparta.realestatefeed.repository.ApartRepository;
 import com.sparta.realestatefeed.repository.QnARepository;
 import com.sparta.realestatefeed.repository.UserRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +39,7 @@ public class QnAService {
         Apart apart = apartRepository.findById(apartId)
                 .orElseThrow(() -> new NoSuchElementException("해당 ID의 아파트를 찾을 수 없습니다."));
 
-        if (!apart.getIsSaled()){
+        if (apart.getIsSaled()){
             throw new NoSuchElementException("판매중인 아파트가 존재하지 않습니다.");
         }
 
@@ -83,12 +84,16 @@ public class QnAService {
 
     }
 
-    public void deleteQnA(Long qnaId) {
+    public void deleteQnA(Long qnaId, User user) {
 
         QnA qna = qnARepository.findById(qnaId)
                 .orElseThrow(() -> new NoSuchElementException("요청하신 댓글이 존재하지 않습니다."));
 
-        qnARepository.deleteById(qna.getQndId());
+        if (user.getId().equals(qna.getUser().getId())) {
+            qnARepository.deleteById(qna.getQndId());
+        }
+
+        throw new AccessDeniedException("직접 작성한 댓글만 삭제할 수 있습니다.");
 
     }
 

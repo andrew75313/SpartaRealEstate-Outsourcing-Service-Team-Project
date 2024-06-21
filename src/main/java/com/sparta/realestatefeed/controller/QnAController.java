@@ -61,9 +61,9 @@ public class QnAController {
     }
 
     @DeleteMapping("aparts/{apartId}/qna/{qnaId}")
-    public ResponseEntity<?> deleteQnA(@PathVariable Long qnaId) {
+    public ResponseEntity<?> deleteQnA(@PathVariable Long qnaId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        qnAService.deleteQnA(qnaId);
+        qnAService.deleteQnA(qnaId, userDetails.getUser());
 
         return ResponseEntity.status(HttpStatus.OK).body("문의 삭제에 성공하셨습니다.");
 
