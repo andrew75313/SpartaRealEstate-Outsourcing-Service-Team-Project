@@ -33,7 +33,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
 
-        String errorMessage = "재로그인을 시도해주세요.";
+        String errorMessage = "토큰을 재발급해주세요.";
 
         try {
             String tokenValue = jwtUtil.getAccessTokenFromHeader(req);
@@ -46,8 +46,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 if (!jwtUtil.validateToken(tokenValue)) {
                     res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     sendMessage(res, errorMessage);
-
-                    throw new UnsupportedJwtException("토큰이 유효하지 않습니다.");
+                    return;
                 }
 
                 Claims userInfo = jwtUtil.getUserInfoFromToken(tokenValue);
@@ -57,15 +56,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 } catch (Exception e) {
                     res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     sendMessage(res, errorMessage);
-
-                    throw new UnsupportedJwtException("토큰이 유효하지 않습니다.");
+                    return;
                 }
             }
-
+            filterChain.doFilter(req, res);
         } catch (UnsupportedJwtException e) {
             sendMessage(res, errorMessage);
         }
-        filterChain.doFilter(req, res);
+
     }
 
     public void setAuthentication(String username) {
