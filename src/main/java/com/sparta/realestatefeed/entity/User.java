@@ -1,6 +1,7 @@
 package com.sparta.realestatefeed.entity;
 
 
+import com.sparta.realestatefeed.dto.UserRegisterRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -36,6 +37,19 @@ public class User extends Timestamped {
 
     @Email
     private String email;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRoleEnum role;
+
+    public User(UserRegisterRequestDto requestDto) {
+        this.userName = requestDto.getUserName();
+        this.password = requestDto.getPassword();
+        this.nickName = requestDto.getNickName();
+        this.info = requestDto.getInfo();
+        this.email = requestDto.getEmail();
+        this.role = UserRoleEnum.USER;
+    }
 
 
 }
