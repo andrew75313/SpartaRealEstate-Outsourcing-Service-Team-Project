@@ -61,10 +61,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     throw new UnsupportedJwtException("토큰이 유효하지 않습니다.");
                 }
             }
-            filterChain.doFilter(req, res);
+
         } catch (UnsupportedJwtException e) {
             sendMessage(res, errorMessage);
         }
+        filterChain.doFilter(req, res);
     }
 
     public void setAuthentication(String username) {
