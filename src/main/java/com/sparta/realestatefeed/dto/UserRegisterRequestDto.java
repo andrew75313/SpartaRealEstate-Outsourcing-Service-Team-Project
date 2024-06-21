@@ -23,7 +23,7 @@ public class UserRegisterRequestDto {
     private String email;
     private String info;
 
-    private String refreshToken;
+
 
     private UserRoleEnum roel;
 
