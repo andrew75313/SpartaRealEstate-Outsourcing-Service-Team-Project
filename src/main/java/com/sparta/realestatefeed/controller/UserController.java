@@ -46,7 +46,7 @@ public class UserController {
             String accessToken = authorizationHeader.replace(JwtConfig.BEARER_PREFIX, "");
 
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            System.out.println(accessToken + ", " + username);
+
 
             authenticationService.logoutUser(accessToken, username);
 
