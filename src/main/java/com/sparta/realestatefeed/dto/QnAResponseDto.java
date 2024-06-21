@@ -1,5 +1,6 @@
 package com.sparta.realestatefeed.dto;
 
+import com.sparta.realestatefeed.entity.QnA;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -8,9 +9,12 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class QnAResponseDto {
-    String content;
 
-    public QnAResponseDto(String s) {
-        this.content = s;
+    private Long qnaId;
+    private String content;
+
+    public QnAResponseDto(QnA qna) {
+        this.qnaId = qna.getQndId();
+        this.content = qna.getContent();
     }
 }
