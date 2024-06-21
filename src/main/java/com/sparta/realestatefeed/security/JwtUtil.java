@@ -25,25 +25,27 @@ public class JwtUtil {
 
         Date date = new Date();
 
-        return Jwts.builder()
-                .setSubject(username)
-                .claim(JwtConfig.AUTHORIZATION_KEY, role)
-                .setExpiration(new Date(date.getTime() + JwtConfig.ACCESS_TOKEN_TIME))
-                .setIssuedAt(date)
-                .signWith(JwtConfig.key, JwtConfig.SIGNATURE_ALGORITHM)
-                .compact();
+        return JwtConfig.BEARER_PREFIX +
+                Jwts.builder()
+                        .setSubject(username)
+                        .claim(JwtConfig.AUTHORIZATION_KEY, role)
+                        .setExpiration(new Date(date.getTime() + JwtConfig.ACCESS_TOKEN_TIME))
+                        .setIssuedAt(date)
+                        .signWith(JwtConfig.key, JwtConfig.SIGNATURE_ALGORITHM)
+                        .compact();
     }
 
     public String createRefreshToken(String username) {
 
         Date date = new Date();
 
-        return Jwts.builder()
-                .setSubject(username)
-                .setExpiration(new Date(date.getTime() + JwtConfig.REFRESH_TOKEN_TIME))
-                .setIssuedAt(date)
-                .signWith(JwtConfig.key)
-                .compact();
+        return JwtConfig.BEARER_PREFIX +
+                Jwts.builder()
+                        .setSubject(username)
+                        .setExpiration(new Date(date.getTime() + JwtConfig.REFRESH_TOKEN_TIME))
+                        .setIssuedAt(date)
+                        .signWith(JwtConfig.key)
+                        .compact();
     }
 
     public String getAccessTokenFromHeader(HttpServletRequest request) {
