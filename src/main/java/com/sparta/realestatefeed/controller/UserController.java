@@ -27,15 +27,6 @@ public class UserController {
         this.userService = userService;
     }
 
-
-    @GetMapping("/a")
-    public ResponseEntity<CommonDto<QnAResponseDto>> get() {
-        // 전달하고 싶은 DTO -> CommonDto에 담기 -> ResponseEntity로 상태와 함께 응답
-        CommonDto<QnAResponseDto> response = new CommonDto<>(HttpStatus.OK.value(), "댓글 리스트 조회 성공", new QnAResponseDto("test"));
-
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
-
     @PostMapping("/signup")
     public ResponseEntity<?> createUser(@RequestBody UserRegisterRequestDto userRegisterRequestDto) {
         try{
