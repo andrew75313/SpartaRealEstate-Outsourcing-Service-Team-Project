@@ -54,12 +54,11 @@ public class ProfileService {
 
         if(passwordRequestDto.isPasswordMatching()){
 
-
             throw new PasswordMismatchException("New Password equal Current Password");
         }
 
 
-        if(passwordRequestDto.isNewPasswordMatch()) {
+        if(!passwordRequestDto.isNewPasswordMatch()) {
 
             throw new PasswordMismatchException("New Password not equal Check New Password");
         }
@@ -74,13 +73,12 @@ public class ProfileService {
             throw new IllegalArgumentException("New password must be different from the last three passwords");
         }
 
-        // Add the current password to the list of previous passwords
+
         previousPasswords.add(0, user.getPassword());
         if (previousPasswords.size() > 3) {
             previousPasswords.remove(3);
         }
 
-        // Update the user's password
         user.setPassword(passwordEncoder.encode(passwordRequestDto.getNewPassword()));
         userRepository.save(user);
 
