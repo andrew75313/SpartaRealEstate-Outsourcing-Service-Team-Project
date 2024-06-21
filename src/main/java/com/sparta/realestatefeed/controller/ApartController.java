@@ -3,8 +3,10 @@ package com.sparta.realestatefeed.controller;
 import com.sparta.realestatefeed.dto.ApartRequestDto;
 import com.sparta.realestatefeed.dto.ApartResponseDto;
 import com.sparta.realestatefeed.entity.User;
+import com.sparta.realestatefeed.security.UserDetailsImpl;
 import com.sparta.realestatefeed.service.ApartService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +21,8 @@ public class ApartController {
     }
 
     @PostMapping
-    public ResponseEntity<ApartResponseDto> createApart(@RequestBody ApartRequestDto apartRequestDto, @RequestParam User user) {
-        ApartResponseDto responseDto = apartService.createApart(apartRequestDto, user);
+    public ResponseEntity<ApartResponseDto> createApart(@RequestBody ApartRequestDto apartRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        ApartResponseDto responseDto = apartService.createApart(apartRequestDto, userDetails.getUser());
         return ResponseEntity.ok(responseDto);
     }
 
