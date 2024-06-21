@@ -25,16 +25,4 @@ public abstract class Timestamped {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modifiedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        LocalDateTime now = LocalDateTime.now();
-        this.createdAt = now;
-        this.modifiedAt = now;
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.modifiedAt = LocalDateTime.now();
-    }
 }
