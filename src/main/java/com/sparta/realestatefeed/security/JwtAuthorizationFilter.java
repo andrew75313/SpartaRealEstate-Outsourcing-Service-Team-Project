@@ -39,6 +39,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             String tokenValue = jwtUtil.getAccessTokenFromHeader(req);
 
             if (tokenValue == null) {
+                errorMessage = "재로그인을 해주세요.";
                 tokenValue = jwtUtil.getRefreshTokenFromHeader(req);
             }
 
