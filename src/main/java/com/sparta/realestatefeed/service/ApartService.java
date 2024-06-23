@@ -6,8 +6,10 @@ import com.sparta.realestatefeed.dto.CommonDto;
 import com.sparta.realestatefeed.entity.Apart;
 import com.sparta.realestatefeed.entity.User;
 import com.sparta.realestatefeed.repository.ApartRepository;
-import com.sparta.realestatefeed.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -40,9 +42,12 @@ public class ApartService {
         return new CommonDto<>(HttpStatus.OK.value(), "아파트 조회에 성공하였습니다.", responseDto);
     }
 
-    public CommonDto<List<ApartResponseDto>> getAllAparts() {
-        List<Apart> aparts = apartRepository.findAllByOrderByModifiedAtDesc();
-        List<ApartResponseDto> responseDtos = aparts.stream().map(ApartResponseDto::new).collect(Collectors.toList());
+    public CommonDto<List<ApartResponseDto>> getAllAparts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Apart> apartsPage = apartRepository.findAllByOrderByModifiedAtDesc(pageable);
+        List<ApartResponseDto> responseDtos = apartsPage.stream()
+                .map(ApartResponseDto::new)
+                .collect(Collectors.toList());
         return new CommonDto<>(HttpStatus.OK.value(), "모든 아파트 조회에 성공하였습니다.", responseDtos);
     }
 
