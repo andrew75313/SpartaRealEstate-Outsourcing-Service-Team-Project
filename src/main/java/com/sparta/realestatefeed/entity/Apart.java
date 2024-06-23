@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table
 @Getter
@@ -35,6 +37,9 @@ public class Apart extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "apart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QnA> qnas;
 
     public Apart(ApartRequestDto requestDto, User user) {
         this.apartName = requestDto.getApartName();
