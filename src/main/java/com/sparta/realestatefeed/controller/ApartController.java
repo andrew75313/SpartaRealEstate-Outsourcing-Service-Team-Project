@@ -35,8 +35,8 @@ public class ApartController {
     }
 
     @GetMapping
-    public ResponseEntity<CommonDto<List<ApartResponseDto>>> getAllAparts() {
-        CommonDto<List<ApartResponseDto>> responseDtos = apartService.getAllAparts();
+    public ResponseEntity<CommonDto<List<ApartResponseDto>>> getAllAparts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+        CommonDto<List<ApartResponseDto>> responseDtos = apartService.getAllAparts(page, size);
         return ResponseEntity.status(HttpStatus.OK).body(responseDtos);
     }
 
