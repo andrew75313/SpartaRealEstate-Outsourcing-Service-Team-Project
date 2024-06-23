@@ -91,6 +91,7 @@ public class QnAService {
 
         if (user.getId().equals(qna.getUser().getId())) {
             qnARepository.deleteById(qna.getQndId());
+            return ;
         }
 
         throw new AccessDeniedException("직접 작성한 댓글만 삭제할 수 있습니다.");
