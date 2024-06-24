@@ -18,9 +18,9 @@ public class ApartResponseDto {
     private String address;
     private String area;
     private Long salePrice;
-    private Boolean isSaled;
+    private String isSaled;
     private LocalDateTime modifiedAt;
-    private Long userId;
+    private String nickName;
 
     public ApartResponseDto(Apart apart) {
         this.id = apart.getId();
@@ -28,8 +28,8 @@ public class ApartResponseDto {
         this.address = apart.getAddress();
         this.area = apart.getArea();
         this.salePrice = apart.getSalePrice();
-        this.isSaled = apart.getIsSaled();
+        this.isSaled = apart.getIsSaled().getDescription();
         this.modifiedAt = apart.getModifiedAt();
-        this.userId = apart.getUser().getId();
+        this.nickName = apart.getUser().getNickName();
     }
 }

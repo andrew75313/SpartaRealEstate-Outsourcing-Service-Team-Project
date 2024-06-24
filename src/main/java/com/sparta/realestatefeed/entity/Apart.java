@@ -29,8 +29,9 @@ public class Apart extends Timestamped {
     @Column(name = "sale_price")
     private Long salePrice;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "is_saled")
-    private Boolean isSaled;
+    private ApartStatusEnum isSaled;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

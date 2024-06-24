@@ -1,5 +1,6 @@
 package com.sparta.realestatefeed.dto;
 
+import com.sparta.realestatefeed.entity.ApartStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,5 +14,5 @@ public class ApartRequestDto {
     private String address;
     private String area;
     private Long salePrice;
-    private Boolean isSaled;
+    private ApartStatusEnum isSaled;
 }
