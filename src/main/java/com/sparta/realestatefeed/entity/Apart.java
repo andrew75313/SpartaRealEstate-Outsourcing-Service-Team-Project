@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "apart")
 @Getter
 @NoArgsConstructor
 public class Apart extends Timestamped {

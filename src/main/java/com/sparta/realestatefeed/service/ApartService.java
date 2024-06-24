@@ -5,6 +5,7 @@ import com.sparta.realestatefeed.dto.ApartResponseDto;
 import com.sparta.realestatefeed.dto.CommonDto;
 import com.sparta.realestatefeed.entity.Apart;
 import com.sparta.realestatefeed.entity.User;
+import com.sparta.realestatefeed.entity.UserRoleEnum;
 import com.sparta.realestatefeed.repository.ApartRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,7 @@ public class ApartService {
 
     @Transactional
     public CommonDto<ApartResponseDto> createApart(ApartRequestDto requestDto, User user) {
+
         Apart apart = new Apart(requestDto, user);
         Apart savedApart = apartRepository.save(apart);
         ApartResponseDto responseDto = new ApartResponseDto(savedApart);
@@ -36,6 +38,7 @@ public class ApartService {
     }
 
     public CommonDto<ApartResponseDto> getApart(Long id) {
+
         Apart apart = apartRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("유효하지 않은 아파트 ID입니다."));
         ApartResponseDto responseDto = new ApartResponseDto(apart);
@@ -43,6 +46,7 @@ public class ApartService {
     }
 
     public CommonDto<List<ApartResponseDto>> getAllAparts(int page, int size) {
+
         Pageable pageable = PageRequest.of(page, size);
         Page<Apart> apartsPage = apartRepository.findAllByOrderByModifiedAtDesc(pageable);
         List<ApartResponseDto> responseDtos = apartsPage.stream()
@@ -53,11 +57,14 @@ public class ApartService {
 
     @Transactional
     public CommonDto<ApartResponseDto> updateApart(Long id, ApartRequestDto requestDto, User user) {
+
         Apart apart = apartRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("유효하지 않은 아파트 ID입니다."));
 
-        if (!apart.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("권한이 없는 사용자입니다.");
+        if (!user.getRole().equals(UserRoleEnum.ADMIN)) {
+            if (!apart.getUser().getId().equals(user.getId())) {
+                throw new IllegalArgumentException("권한이 없는 사용자입니다.");
+            }
         }
 
         apart.update(requestDto);
@@ -67,11 +74,14 @@ public class ApartService {
     }
 
     public CommonDto<String> deleteApart(Long id, User user) {
+
         Apart apart = apartRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("유효하지 않은 아파트 ID입니다."));
 
-        if (!apart.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("권한이 없는 사용자입니다.");
+        if (!user.getRole().equals(UserRoleEnum.ADMIN)) {
+            if (!apart.getUser().getId().equals(user.getId())) {
+                throw new IllegalArgumentException("권한이 없는 사용자입니다.");
+            }
         }
 
         apartRepository.delete(apart);
