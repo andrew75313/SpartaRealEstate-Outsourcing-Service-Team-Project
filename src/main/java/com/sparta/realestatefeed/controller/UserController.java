@@ -8,6 +8,7 @@ import com.sparta.realestatefeed.dto.UserRegisterResponseDto;
 import com.sparta.realestatefeed.service.AuthenticationService;
 import com.sparta.realestatefeed.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,7 +29,7 @@ public class UserController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
 
-
+    @Autowired
     public UserController(UserService userService, AuthenticationService authenticationService) {
 
         this.authenticationService = authenticationService;
@@ -59,7 +60,7 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    private ResponseEntity<?> userLogout(@RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<?> userLogout(@RequestHeader("Authorization") String authorizationHeader) {
 
         try {
             String accessToken = authorizationHeader.replace(JwtConfig.BEARER_PREFIX, "");
