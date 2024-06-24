@@ -77,5 +77,4 @@ public class ApartService {
         apartRepository.delete(apart);
         return new CommonDto<>(HttpStatus.OK.value(), "아파트 삭제에 성공하였습니다.", null);
     }
-
 }

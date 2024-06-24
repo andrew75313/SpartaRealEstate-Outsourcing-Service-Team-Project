@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface ApartRepository extends JpaRepository<Apart, Long> {
+
     Page<Apart> findAllByOrderByModifiedAtDesc(Pageable pageable);
 }
