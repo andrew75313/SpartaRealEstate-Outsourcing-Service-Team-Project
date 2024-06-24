@@ -11,15 +11,15 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public class UserRegisterRequestDto {
 
-    @Size(min = 10, max = 20)
-    @Pattern(regexp = "^[a-zA-Z0-9]*$")
+    @Size(min = 4, max = 10)
+    @Pattern(regexp = "^[a-z0-9]*$")
     private String userName;
 
-    @Size(min = 10)
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_])*$")
-    private String password; // 로그인 Password
+    @Size(min = 8, max = 15)
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_])[a-zA-Z0-9!@#$%^&*?_]+$")
+    private String password;
 
-    private String nickName; // 이름
+    private String nickName;
 
     @Email
     private String email;

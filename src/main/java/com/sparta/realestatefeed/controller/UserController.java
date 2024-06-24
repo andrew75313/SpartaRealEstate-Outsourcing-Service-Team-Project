@@ -53,6 +53,8 @@ public class UserController {
 
             authenticationService.logoutUser(accessToken, username);
 
+            SecurityContextHolder.clearContext();
+
             return ResponseEntity.ok().body("로그아웃되었습니다.");
         } catch (InputMismatchException e) {
             return ResponseEntity.badRequest().body("아이디 또는 비밀번호를 확인해주세요. 로그인에 실패하셨습니다.");
