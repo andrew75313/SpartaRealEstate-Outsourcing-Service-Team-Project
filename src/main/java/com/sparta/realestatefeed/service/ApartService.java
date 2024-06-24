@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -46,14 +47,24 @@ public class ApartService {
         return new CommonDto<>(HttpStatus.OK.value(), "아파트 조회에 성공하였습니다.", responseDto);
     }
 
-    public CommonDto<List<ApartResponseDto>> getAllAparts(int page, int size) {
+    public CommonDto<List<ApartResponseDto>> getAparts(String area, int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<Apart> apartsPage = apartRepository.findAllByOrderByModifiedAtDesc(pageable);
+        Page<Apart> apartsPage;
+        if (area == null || area.isEmpty()) {
+            apartsPage = apartRepository.findAllByOrderByModifiedAtDesc(pageable);
+        } else {
+            apartsPage = apartRepository.findByArea(area, pageable);
+        }
+
+        if (apartsPage.isEmpty()) {
+            return new CommonDto<>(HttpStatus.NOT_FOUND.value(), "해당 지역의 아파트가 없습니다.", new ArrayList<>());
+        }
+
         List<ApartResponseDto> responseDtos = apartsPage.stream()
                 .map(ApartResponseDto::new)
                 .collect(Collectors.toList());
-        return new CommonDto<>(HttpStatus.OK.value(), "모든 아파트 조회에 성공하였습니다.", responseDtos);
+        return new CommonDto<>(HttpStatus.OK.value(), (area == null || area.isEmpty() ? "모든" : area + " 지역별") + " 아파트 조회에 성공하였습니다.", responseDtos);
     }
 
     @Transactional
@@ -89,12 +100,13 @@ public class ApartService {
         return new CommonDto<>(HttpStatus.OK.value(), "아파트 삭제에 성공하였습니다.", null);
     }
 
-    public CommonDto<List<ApartResponseDto>> getApartsByArea(String area) {
+    public CommonDto<List<ApartResponseDto>> getApartsByArea(String area, int page, int size, String sortBy, String order) {
 
-        List<Apart> aparts = apartRepository.findByArea(area);
-        List<ApartResponseDto> responseDtos = aparts.stream()
+        Pageable pageable = PageRequest.of(page, size, order.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending());
+        Page<Apart> apartsPage = apartRepository.findByArea(area, pageable);
+        List<ApartResponseDto> responseDtos = apartsPage.stream()
                 .map(ApartResponseDto::new)
                 .collect(Collectors.toList());
-        return new CommonDto<>(HttpStatus.OK.value(), area + "지역별 아파트 조회에 성공하였습니다.", responseDtos);
+        return new CommonDto<>(HttpStatus.OK.value(), area + " 지역별 아파트 조회에 성공하였습니다.", responseDtos);
     }
 }

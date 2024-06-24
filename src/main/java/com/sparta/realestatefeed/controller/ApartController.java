@@ -48,23 +48,13 @@ public class ApartController {
      * @return : 전체 게시글 조회 데이터
      */
     @GetMapping
-    public ResponseEntity<CommonDto<List<ApartResponseDto>>> getAllAparts(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size) {
-        page = page > 0 ? page -1 : 0;
-        CommonDto<List<ApartResponseDto>> responseDtos = apartService.getAllAparts(page, size);
+    public ResponseEntity<CommonDto<List<ApartResponseDto>>> getAparts(@RequestParam(required = false) String area,
+                                                                       @RequestParam(defaultValue = "1") int page,
+                                                                       @RequestParam(defaultValue = "5") int size) {
+        page = page > 0 ? page - 1 : 0;
+        CommonDto<List<ApartResponseDto>> responseDtos = apartService.getAparts(area, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(responseDtos);
     }
-
-    /**
-     * 지역별 조회 기능
-     * @return : 지역별 게시글 조회 데이터
-     */
-    @GetMapping("/area/{area}")
-    public ResponseEntity<CommonDto<List<ApartResponseDto>>> getApartsByArea(@PathVariable String area) {
-        CommonDto<List<ApartResponseDto>> responseDtods = apartService.getApartsByArea(area);
-        return ResponseEntity.status(HttpStatus.OK).body(responseDtods);
-    }
-
-
 
     /**
      * 게시글 수정 기능 ( 인가 필요 )
