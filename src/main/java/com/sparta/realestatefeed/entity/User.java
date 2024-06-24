@@ -52,7 +52,7 @@ public class User extends Timestamped {
         this.nickName = requestDto.getNickName();
         this.info = requestDto.getInfo();
         this.email = requestDto.getEmail();
-        this.role = UserRoleEnum.USER;
+        this.role = requestDto.getRole();
     }
 
 

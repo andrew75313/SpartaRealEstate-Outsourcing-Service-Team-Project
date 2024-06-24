@@ -10,12 +10,14 @@ import com.sparta.realestatefeed.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.InputMismatchException;
 
 @RestController
 @RequestMapping("/api")
+@Validated
 public class UserController {
 
     private final UserService userService;
@@ -49,7 +51,6 @@ public class UserController {
             String accessToken = authorizationHeader.replace(JwtConfig.BEARER_PREFIX, "");
 
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
 
             authenticationService.logoutUser(accessToken, username);
 
