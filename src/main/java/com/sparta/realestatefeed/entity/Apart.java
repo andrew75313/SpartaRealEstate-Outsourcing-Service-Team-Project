@@ -1,15 +1,13 @@
 package com.sparta.realestatefeed.entity;
 
-
 import com.sparta.realestatefeed.dto.ApartRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "apart")
 @Getter
 @NoArgsConstructor
 public class Apart extends Timestamped {
