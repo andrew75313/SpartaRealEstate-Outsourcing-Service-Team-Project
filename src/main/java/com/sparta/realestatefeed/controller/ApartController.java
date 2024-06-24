@@ -55,6 +55,18 @@ public class ApartController {
     }
 
     /**
+     * 지역별 조회 기능
+     * @return : 지역별 게시글 조회 데이터
+     */
+    @GetMapping("/area/{area}")
+    public ResponseEntity<CommonDto<List<ApartResponseDto>>> getApartsByArea(@PathVariable String area) {
+        CommonDto<List<ApartResponseDto>> responseDtods = apartService.getApartsByArea(area);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDtods);
+    }
+
+
+
+    /**
      * 게시글 수정 기능 ( 인가 필요 )
      * @param id : 수정할 게시글의 id
      * @param apartRequestDto : 수정할 게시글의 정보
