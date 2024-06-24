@@ -14,7 +14,7 @@ public class QnAResponseDto {
     private String content;
 
     public QnAResponseDto(QnA qna) {
-        this.qnaId = qna.getQndId();
+        this.qnaId = qna.getQnaId();
         this.content = qna.getContent();
     }
 }
