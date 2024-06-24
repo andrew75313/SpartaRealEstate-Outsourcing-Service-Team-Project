@@ -47,14 +47,24 @@ public class ApartService {
         return new CommonDto<>(HttpStatus.OK.value(), "아파트 조회에 성공하였습니다.", responseDto);
     }
 
-    public CommonDto<List<ApartResponseDto>> getAllAparts(int page, int size) {
+    public CommonDto<List<ApartResponseDto>> getAparts(String area, int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<Apart> apartsPage = apartRepository.findAllByOrderByModifiedAtDesc(pageable);
+        Page<Apart> apartsPage;
+        if (area == null || area.isEmpty()) {
+            apartsPage = apartRepository.findAllByOrderByModifiedAtDesc(pageable);
+        } else {
+            apartsPage = apartRepository.findByArea(area, pageable);
+        }
+
+        if (apartsPage.isEmpty()) {
+            return new CommonDto<>(HttpStatus.NOT_FOUND.value(), "해당 지역의 아파트가 없습니다.", new ArrayList<>());
+        }
+
         List<ApartResponseDto> responseDtos = apartsPage.stream()
                 .map(ApartResponseDto::new)
                 .collect(Collectors.toList());
-        return new CommonDto<>(HttpStatus.OK.value(), "모든 아파트 조회에 성공하였습니다.", responseDtos);
+        return new CommonDto<>(HttpStatus.OK.value(), (area == null || area.isEmpty() ? "모든" : area + " 지역별") + " 아파트 조회에 성공하였습니다.", responseDtos);
     }
 
     @Transactional
