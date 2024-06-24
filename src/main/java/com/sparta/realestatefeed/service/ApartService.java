@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -86,5 +87,14 @@ public class ApartService {
 
         apartRepository.delete(apart);
         return new CommonDto<>(HttpStatus.OK.value(), "아파트 삭제에 성공하였습니다.", null);
+    }
+
+    public CommonDto<List<ApartResponseDto>> getApartsByArea(String area) {
+
+        List<Apart> aparts = apartRepository.findByArea(area);
+        List<ApartResponseDto> responseDtos = aparts.stream()
+                .map(ApartResponseDto::new)
+                .collect(Collectors.toList());
+        return new CommonDto<>(HttpStatus.OK.value(), area + "지역별 아파트 조회에 성공하였습니다.", responseDtos);
     }
 }
