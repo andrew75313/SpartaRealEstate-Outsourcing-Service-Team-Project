@@ -11,10 +11,14 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -32,7 +36,16 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> createUser(@RequestBody @Valid UserRegisterRequestDto userRegisterRequestDto) {
+    public ResponseEntity<?> createUser(@RequestBody @Valid UserRegisterRequestDto userRegisterRequestDto, BindingResult bindingResult) {
+
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        List<String> responseList = new ArrayList<>();
+        if(fieldErrors.size() > 0) {
+            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+                responseList.add( fieldError.getDefaultMessage()+"\n");
+            }
+            return ResponseEntity.badRequest().body(responseList);
+        }
 
         try{
             UserRegisterResponseDto responseDto = userService.registerUser(userRegisterRequestDto);

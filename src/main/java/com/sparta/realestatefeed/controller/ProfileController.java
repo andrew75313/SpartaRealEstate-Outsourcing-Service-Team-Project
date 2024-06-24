@@ -13,8 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -59,7 +64,7 @@ public class ProfileController {
     }
 
     @PutMapping("/profiles")
-    public ResponseEntity<?> updateUserProfile(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ProfileRequestDto profileRequestDto) {
+    public ResponseEntity<?> updateUserProfile(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid ProfileRequestDto profileRequestDto) {
 
         HttpHeaders headers = new HttpHeaders();
         try{
@@ -74,6 +79,8 @@ public class ProfileController {
         } catch (AccessDeniedException e) {
             headers.add("Message", "인증되지 않은 사용자입니다.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(headers).build();
+        } catch (IllegalArgumentException e) {
+            throw e;
         } catch (RuntimeException e) {
             String errorMessage = "Profile Error: " + e.getMessage();
             headers.add("Message", errorMessage);
@@ -83,7 +90,16 @@ public class ProfileController {
     }
 
     @PutMapping("/profiles/password")
-    public ResponseEntity<?> updateUserPassword(@AuthenticationPrincipal  UserDetailsImpl userDetails, @RequestBody @Valid PasswordRequestDto passwordRequestDto) {
+    public ResponseEntity<?> updateUserPassword(@AuthenticationPrincipal  UserDetailsImpl userDetails, @RequestBody @Valid PasswordRequestDto passwordRequestDto,BindingResult bindingResult) {
+
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        List<String> responseList = new ArrayList<>();
+        if(fieldErrors.size() > 0) {
+            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+                responseList.add( fieldError.getDefaultMessage()+"\n");
+            }
+            return ResponseEntity.badRequest().body(responseList);
+        }
 
         HttpHeaders headers = new HttpHeaders();
         try {
@@ -99,13 +115,9 @@ public class ProfileController {
             logger.error("AccessDeniedException: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(headers).build();
         } catch (PasswordMismatchException e) {
-            headers.add("Message", e.getMessage());
-            logger.error("PasswordMismatchException: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(headers).build();
-        } catch (IllegalArgumentException e) {
-            headers.add("Message", e.getMessage());
-            logger.error("IllegalArgumentException: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(headers).build();
+           throw e;
+        }catch (IllegalArgumentException ei) {
+            throw ei;
         } catch (RuntimeException e) {
             String errorMessage = "Profile Password Change Error: " + e.getMessage();
             headers.add("Message", errorMessage);
