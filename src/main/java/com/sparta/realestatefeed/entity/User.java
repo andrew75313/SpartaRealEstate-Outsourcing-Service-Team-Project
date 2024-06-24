@@ -27,17 +27,18 @@ public class User extends Timestamped {
     private Long id;
 
     @NotNull
-    @Size(min = 10, max = 20)
-    @Pattern(regexp = "^[a-zA-Z0-9]*$")
+    @Size(min = 4, max = 10)
+    @Pattern(regexp = "^[a-z0-9]*$")
     @Column(nullable = false, unique = true)
-    private String userName; // 로그인 ID
+    private String userName;
 
     @NotNull
-    @Column(nullable = false, length = 100) // 단방향 인코딩된 패스워드 길이
-    private String password; // 로그인 Password
+    @Size(min = 8, max = 15)
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_])[a-zA-Z0-9!@#$%^&*?_]+$")
+    private String password;
 
-    private String nickName; // 이름
-    private String info; // 한 줄 소개
+    private String nickName;
+    private String info;
 
     @Email
     private String email;
@@ -52,7 +53,7 @@ public class User extends Timestamped {
         this.nickName = requestDto.getNickName();
         this.info = requestDto.getInfo();
         this.email = requestDto.getEmail();
-        this.role = UserRoleEnum.USER;
+        this.role = requestDto.getRole();
     }
 
 

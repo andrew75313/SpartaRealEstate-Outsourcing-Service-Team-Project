@@ -65,7 +65,7 @@ public class ProfileController {
             String userName = userDetails.getUser().getUserName();
 
             ProfileResponseDto responseDto = profileService.updateUserProfile(userName, profileRequestDto);
-            CommonDto<ProfileResponseDto> response = new CommonDto<>(HttpStatus.OK.value(), "회원 조회", responseDto);
+            CommonDto<ProfileResponseDto> response = new CommonDto<>(HttpStatus.OK.value(), "회원 수정", responseDto);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }catch (UserNotFoundException e) {
             headers.add("Message", "해당 사용자를 찾을 수 없습니다.");
@@ -83,6 +83,7 @@ public class ProfileController {
 
     @PutMapping("/profiles/password")
     public ResponseEntity<?> updateUserPassword(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PasswordRequestDto passwordRequestDto) {
+
         HttpHeaders headers = new HttpHeaders();
         try {
             String userName = userDetails.getUser().getUserName();

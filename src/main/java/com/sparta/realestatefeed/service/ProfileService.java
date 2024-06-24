@@ -34,6 +34,7 @@ public class ProfileService {
     }
 
     public ProfileResponseDto updateUserProfile(String userName, ProfileRequestDto profileRequestDto) {
+
         User user = userRepository.findByUserName(userName).orElseThrow(
                 () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다.")
         );
@@ -48,6 +49,7 @@ public class ProfileService {
     }
 
     public void updateUserPassword(String userName, PasswordRequestDto passwordRequestDto) {
+
         User user = userRepository.findByUserName(userName).orElseThrow(
                 () -> new IllegalArgumentException("User not found")
         );

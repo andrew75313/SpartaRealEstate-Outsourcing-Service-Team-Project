@@ -10,12 +10,14 @@ import com.sparta.realestatefeed.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.InputMismatchException;
 
 @RestController
 @RequestMapping("/api")
+@Validated
 public class UserController {
 
     private final UserService userService;
@@ -23,12 +25,14 @@ public class UserController {
 
 
     public UserController(UserService userService, AuthenticationService authenticationService) {
+
         this.authenticationService = authenticationService;
         this.userService = userService;
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> createUser(@RequestBody UserRegisterRequestDto userRegisterRequestDto) {
+
         try{
             UserRegisterResponseDto responseDto = userService.registerUser(userRegisterRequestDto);
             CommonDto<UserRegisterResponseDto> response = new CommonDto<>(HttpStatus.OK.value(), "회원가입", responseDto);
@@ -42,13 +46,15 @@ public class UserController {
 
     @PostMapping("/logout")
     private ResponseEntity<?> userLogout(@RequestHeader("Authorization") String authorizationHeader) {
+
         try {
             String accessToken = authorizationHeader.replace(JwtConfig.BEARER_PREFIX, "");
 
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-
             authenticationService.logoutUser(accessToken, username);
+
+            SecurityContextHolder.clearContext();
 
             return ResponseEntity.ok().body("로그아웃되었습니다.");
         } catch (InputMismatchException e) {

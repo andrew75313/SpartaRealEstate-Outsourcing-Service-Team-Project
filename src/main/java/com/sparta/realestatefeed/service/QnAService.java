@@ -6,6 +6,7 @@ import com.sparta.realestatefeed.dto.QnAResponseDto;
 import com.sparta.realestatefeed.entity.Apart;
 import com.sparta.realestatefeed.entity.QnA;
 import com.sparta.realestatefeed.entity.User;
+import com.sparta.realestatefeed.entity.UserRoleEnum;
 import com.sparta.realestatefeed.repository.ApartRepository;
 import com.sparta.realestatefeed.repository.QnARepository;
 import com.sparta.realestatefeed.repository.UserRepository;
@@ -74,6 +75,12 @@ public class QnAService {
         QnA qna = qnARepository.findById(qnaId)
                 .orElseThrow(() -> new NoSuchElementException("요청하신 댓글이 존재하지 않습니다."));
 
+        if (!user.getRole().equals(UserRoleEnum.ADMIN)) {
+            if (!user.getId().equals(qna.getUser().getId())) {
+                throw new AccessDeniedException("직접 작성한 댓글만 수정할 수 있습니다.");
+            }
+        }
+
         qna.changeContent(qnARequestDto.getContent());
 
         QnAResponseDto responseDto = new QnAResponseDto(qna);
@@ -89,12 +96,13 @@ public class QnAService {
         QnA qna = qnARepository.findById(qnaId)
                 .orElseThrow(() -> new NoSuchElementException("요청하신 댓글이 존재하지 않습니다."));
 
-        if (user.getId().equals(qna.getUser().getId())) {
-            qnARepository.deleteById(qna.getQndId());
-            return ;
+        if (!user.getRole().equals(UserRoleEnum.ADMIN)) {
+            if (!user.getId().equals(qna.getUser().getId())) {
+                throw new AccessDeniedException("직접 작성한 댓글만 삭제할 수 있습니다.");
+            }
         }
 
-        throw new AccessDeniedException("직접 작성한 댓글만 삭제할 수 있습니다.");
+        qnARepository.deleteById(qna.getQnaId());
 
     }
 
