@@ -65,6 +65,7 @@ public class User extends Timestamped {
     public void updateProfile(ProfileRequestDto profileRequestDto) {
         this.nickName = profileRequestDto.getNickName();
         this.info = profileRequestDto.getInfo();
+        this.email = profileRequestDto.getEmail();
     }
 
 
