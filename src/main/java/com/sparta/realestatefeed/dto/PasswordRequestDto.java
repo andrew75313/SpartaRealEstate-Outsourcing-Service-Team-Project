@@ -6,16 +6,16 @@ import lombok.Getter;
 
 @Getter
 public class PasswordRequestDto {
-    @Size(min = 10)
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_])*$")
+    @Size(min = 8, max = 15)
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_])[a-zA-Z0-9!@#$%^&*?_]+$")
     private String currentPassword;
 
-    @Size(min = 10)
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_])*$")
+    @Size(min = 8, max = 15)
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_])[a-zA-Z0-9!@#$%^&*?_]+$")
     private String newPassword;
 
-    @Size(min = 10)
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_])*$")
+    @Size(min = 8, max = 15)
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_])[a-zA-Z0-9!@#$%^&*?_]+$")
     private String checkNewPassword;
 
     public boolean isNewPasswordMatch() {

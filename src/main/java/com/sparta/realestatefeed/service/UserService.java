@@ -19,19 +19,21 @@ import java.util.InputMismatchException;
 public class UserService {
 
     private final UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     public UserRegisterResponseDto registerUser(UserRegisterRequestDto userRegisterRequestDto) {
+
         if (userRepository.existsByUserName(userRegisterRequestDto.getUserName())) {
             throw new UserAlreadyExistsException("이미 존재하는 ID");
         }
 
-        if (userRegisterRequestDto.getPassword().length() < 10) {
+        if (userRegisterRequestDto.getPassword().length() < 8) {
             throw new InputMismatchException("잘못된 비밀번호 형식");
         }
 
@@ -42,6 +44,7 @@ public class UserService {
     }
 
     private User initialize(UserRegisterRequestDto userRegisterRequestDto) {
+
         User user = new User(userRegisterRequestDto);
         user.setPassword(passwordEncoder.encode(userRegisterRequestDto.getPassword()));
 
