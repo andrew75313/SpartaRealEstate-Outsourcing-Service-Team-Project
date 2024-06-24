@@ -5,6 +5,7 @@ import com.sparta.realestatefeed.exception.PasswordMismatchException;
 import com.sparta.realestatefeed.exception.UserNotFoundException;
 import com.sparta.realestatefeed.security.UserDetailsImpl;
 import com.sparta.realestatefeed.service.ProfileService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -82,7 +83,7 @@ public class ProfileController {
     }
 
     @PutMapping("/profiles/password")
-    public ResponseEntity<?> updateUserPassword(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PasswordRequestDto passwordRequestDto) {
+    public ResponseEntity<?> updateUserPassword(@AuthenticationPrincipal  UserDetailsImpl userDetails, @RequestBody @Valid PasswordRequestDto passwordRequestDto) {
 
         HttpHeaders headers = new HttpHeaders();
         try {

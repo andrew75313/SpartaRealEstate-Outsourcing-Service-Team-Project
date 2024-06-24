@@ -33,7 +33,7 @@ public class UserService {
             throw new UserAlreadyExistsException("이미 존재하는 ID");
         }
 
-        if (userRegisterRequestDto.getPassword().length() < 8) {
+        if (userRegisterRequestDto.getPassword().length() < 8 || userRegisterRequestDto.getPassword().length() > 15) {
             throw new InputMismatchException("잘못된 비밀번호 형식");
         }
 

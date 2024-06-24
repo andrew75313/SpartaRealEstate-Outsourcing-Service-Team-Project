@@ -7,6 +7,7 @@ import com.sparta.realestatefeed.dto.UserRegisterRequestDto;
 import com.sparta.realestatefeed.dto.UserRegisterResponseDto;
 import com.sparta.realestatefeed.service.AuthenticationService;
 import com.sparta.realestatefeed.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> createUser(@RequestBody UserRegisterRequestDto userRegisterRequestDto) {
+    public ResponseEntity<?> createUser(@RequestBody @Valid UserRegisterRequestDto userRegisterRequestDto) {
 
         try{
             UserRegisterResponseDto responseDto = userService.registerUser(userRegisterRequestDto);
