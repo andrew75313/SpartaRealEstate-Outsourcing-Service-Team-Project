@@ -11,5 +11,5 @@ import java.util.List;
 public interface ApartRepository extends JpaRepository<Apart, Long> {
 
     Page<Apart> findAllByOrderByModifiedAtDesc(Pageable pageable);
-    List<Apart> findByArea(String area);
+    Page<Apart> findByArea(String area, Pageable pageable);
 }
