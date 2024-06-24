@@ -3,6 +3,7 @@ package com.sparta.realestatefeed.service;
 import com.sparta.realestatefeed.entity.User;
 import com.sparta.realestatefeed.repository.UserRepository;
 import com.sparta.realestatefeed.security.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ public class AuthenticationService {
     private final RefreshTokenService refreshTokenService;
     private final JwtUtil jwtUtil;
 
+    @Autowired
     public AuthenticationService(UserRepository userRepository,
                                  PasswordEncoder passwordEncoder,
                                  RefreshTokenService refreshTokenService,
