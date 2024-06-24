@@ -22,6 +22,7 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -42,6 +43,7 @@ public class UserService {
     }
 
     private User initialize(UserRegisterRequestDto userRegisterRequestDto) {
+
         User user = new User(userRegisterRequestDto);
         user.setPassword(passwordEncoder.encode(userRegisterRequestDto.getPassword()));
 

@@ -83,6 +83,7 @@ public class ProfileController {
 
     @PutMapping("/profiles/password")
     public ResponseEntity<?> updateUserPassword(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PasswordRequestDto passwordRequestDto) {
+
         HttpHeaders headers = new HttpHeaders();
         try {
             String userName = userDetails.getUser().getUserName();

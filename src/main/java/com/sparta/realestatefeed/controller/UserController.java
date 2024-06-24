@@ -23,12 +23,14 @@ public class UserController {
 
 
     public UserController(UserService userService, AuthenticationService authenticationService) {
+
         this.authenticationService = authenticationService;
         this.userService = userService;
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> createUser(@RequestBody UserRegisterRequestDto userRegisterRequestDto) {
+
         try{
             UserRegisterResponseDto responseDto = userService.registerUser(userRegisterRequestDto);
             CommonDto<UserRegisterResponseDto> response = new CommonDto<>(HttpStatus.OK.value(), "회원가입", responseDto);
@@ -42,6 +44,7 @@ public class UserController {
 
     @PostMapping("/logout")
     private ResponseEntity<?> userLogout(@RequestHeader("Authorization") String authorizationHeader) {
+
         try {
             String accessToken = authorizationHeader.replace(JwtConfig.BEARER_PREFIX, "");
 
