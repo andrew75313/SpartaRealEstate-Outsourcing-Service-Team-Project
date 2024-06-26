@@ -3,10 +3,7 @@ package com.sparta.realestatefeed.service;
 import com.sparta.realestatefeed.dto.CommonDto;
 import com.sparta.realestatefeed.dto.QnARequestDto;
 import com.sparta.realestatefeed.dto.QnAResponseDto;
-import com.sparta.realestatefeed.entity.Apart;
-import com.sparta.realestatefeed.entity.QnA;
-import com.sparta.realestatefeed.entity.User;
-import com.sparta.realestatefeed.entity.UserRoleEnum;
+import com.sparta.realestatefeed.entity.*;
 import com.sparta.realestatefeed.repository.ApartRepository;
 import com.sparta.realestatefeed.repository.QnARepository;
 import com.sparta.realestatefeed.repository.UserRepository;
@@ -40,8 +37,8 @@ public class QnAService {
         Apart apart = apartRepository.findById(apartId)
                 .orElseThrow(() -> new NoSuchElementException("해당 ID의 아파트를 찾을 수 없습니다."));
 
-        if (apart.getIsSaled()){
-            throw new NoSuchElementException("판매중인 아파트가 존재하지 않습니다.");
+        if (apart.getIsSaled() == ApartStatusEnum.SOLD) {
+            throw new NoSuchElementException("매매중인 아파트가 존재하지 않습니다.");
         }
 
         QnA saveQnA = new QnA(qnARequestDto.getContent(),user, apart);
