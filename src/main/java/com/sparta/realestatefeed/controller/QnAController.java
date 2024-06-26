@@ -42,10 +42,10 @@ public class QnAController {
     }
 
     @GetMapping("aparts/{apartId}/qna")
-    public ResponseEntity<List<CommonDto<QnAResponseDto>>> getAllQnA(@PathVariable Long apartId) {
+    public ResponseEntity<CommonDto<List<QnAResponseDto>>> getAllQnAForApartId(@PathVariable Long apartId) {
 
 
-        List<CommonDto<QnAResponseDto>> responseDto = qnAService.selectAll(apartId);
+        CommonDto<List<QnAResponseDto>> responseDto = qnAService.selectByApartId(apartId);
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
 

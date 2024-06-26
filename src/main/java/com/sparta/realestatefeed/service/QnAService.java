@@ -106,18 +106,20 @@ public class QnAService {
 
     }
 
-    public List<CommonDto<QnAResponseDto>> selectAll(Long apartId) {
+    public CommonDto<List<QnAResponseDto>> selectByApartId(Long apartId) {
 
         List<QnA> qnas = qnARepository.findByApartId(apartId);
 
-        List<CommonDto<QnAResponseDto>> responseDtos = new ArrayList<>();
+        List<QnAResponseDto> responseDtos = new ArrayList<>();
 
         for (QnA l : qnas) {
             QnAResponseDto qnaResponseDto = new QnAResponseDto(l);
-            CommonDto<QnAResponseDto> commonDto = new CommonDto<>(HttpStatus.OK.value(), "문의 조회에 성공하셨습니다.", qnaResponseDto);
-            responseDtos.add(commonDto);
+            responseDtos.add(qnaResponseDto);
+
         }
 
-        return responseDtos;
+        CommonDto<List<QnAResponseDto>> commonDto = new CommonDto<>(HttpStatus.OK.value(), "아파트에 대한 문의 조회에 성공하셨습니다.", responseDtos);
+
+        return commonDto;
     }
 }

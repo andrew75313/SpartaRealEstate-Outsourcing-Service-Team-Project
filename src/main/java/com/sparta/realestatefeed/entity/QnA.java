@@ -12,6 +12,7 @@ public class QnA extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "qna_id", nullable = false)
     private Long qnaId;
 
     @Column(name = "content", nullable = false)
